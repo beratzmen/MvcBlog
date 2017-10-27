@@ -1,0 +1,65 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<MvcBlog.Models.Makale>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-18">
+    @foreach (var item in Model)
+    {
+
+        <div class="card mb-4">
+            <div style="text-align:center">
+                <img class="img-responsive" src="@item.Foto" alt="@item.Baslik" width="700" height="300">
+                
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="/Home/MakaleDetay/@item.MakaleId">@item.Baslik</a>
+                </h2>
+
+                <hr />
+
+                @if (item.Icerik.Length > 150)
+                {
+                    <p class="card-text">
+                        @Html.Raw(item.Icerik.Substring(0, 150))...
+                    </p>
+                }
+                else
+                {
+                    <p class="card-text">@Html.Raw(item.Icerik) ...</p>
+                }
+                <a href="/Home/MakaleDetay/@item.MakaleId" class="btn btn-primary">Devamını Oku &rarr;</a>
+                <hr />
+            </div>
+
+
+
+            <div class="card-footer text-muted">
+                <img class="d-flex mr-3 rounded-circle img-responsive" src="@item.Uye.Foto" alt="@item.Uye.AdSoyad" width="60" />
+                Yazar :     <a href="/Uye/UyeProfil/@item.Uye.UyeId">@item.Uye.KullanıcıAdi</a>
+                Tarih :      @string.Format("{0: MMMM yyyy}", item.Tarih)
+                @*<span class="glyphicon glyphicon-tags"></span>   @item.Etikets.Count()*@
+            </div>
+        </div>
+
+    }
+
+    <ul class="pagination justify-content-center mb-4">
+        <li class="page-item" >
+            <div class="row">
+                <div class="col-md-18 pagination-lg">
+                    <div class="pagedList pagination-lg">                                           
+                            @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page }), PagedListRenderOptions.Classic)
+                     </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+
+    </div>
+
